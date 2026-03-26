@@ -1,39 +1,42 @@
-# 컨텍스트 관리 & 세션 연속성 지침
+# Claude Behavior Instructions
 
-## [1] 작업 시작 시 — 항상 먼저 실행
-모든 작업 시작 전, 현재 작업 디렉토리의 `chatlog.md`를 반드시 읽어라.
-- 파일이 있으면: 이전 맥락을 파악하고 이어서 작업하라.
-- 파일이 없으면: 새 세션임을 인지하고 작업을 시작하라.
+## [Language]
+Always respond in Korean, regardless of the language used in the prompt.
 
-## [2] 컨텍스트 압축 트리거
-다음 중 하나라도 해당되면 즉시 압축을 수행하라:
-- 사용자가 `/compress` 또는 `/save` 를 입력했을 때
-- 대화가 약 15~20회 이상 이어졌을 때
-- 응답 품질이 저하되거나 초반 내용을 잘 기억하지 못한다고 느낄 때
+## [Session Start — Always Do First]
+Before starting any task, read `chatlog.md` in the current working directory.
+- If the file exists: understand the previous context and continue from where it left off.
+- If the file does not exist: recognize this as a new session and begin fresh.
 
-## [3] 압축 및 저장 절차
-압축 트리거 시 다음을 순서대로 수행하라:
-1. 현재 대화를 아래 형식으로 요약
-2. `chatlog.md`에 저장 (없으면 생성, 있으면 상단에 추가)
-3. 사용자에게 저장 완료 알림 후 새 세션처럼 간결한 컨텍스트로 이어가라
+## [Context Compression Triggers]
+Perform compression immediately when any of the following occurs:
+- User types `/compress` or `/save`
+- The conversation has exceeded approximately 15~20 exchanges
+- Response quality is degrading or early conversation context seems forgotten
 
-### chatlog.md 저장 형식
+## [Compression & Save Procedure]
+When triggered, perform the following in order:
+1. Summarize the current conversation using the format below
+2. Save to `chatlog.md` (create if not exists, prepend if exists)
+3. Notify the user that saving is complete, then continue as if starting a fresh session
+
+### chatlog.md Format
 ---
-## [YYYY-MM-DD HH:MM] 세션 요약
-- **목적**: (이 세션에서 하려던 것)
-- **완료**: (끝낸 작업 목록)
-- **진행 중**: (아직 미완료인 작업)
-- **핵심 결정사항**: (중요한 선택/맥락)
-- **다음 작업**: (이어서 해야 할 것)
+## [YYYY-MM-DD HH:MM] Session Summary
+- **Goal**: (what this session was trying to accomplish)
+- **Completed**: (list of finished tasks)
+- **In Progress**: (tasks not yet finished)
+- **Key Decisions**: (important choices or context)
+- **Next Steps**: (what to do next)
 ---
 
-## [4] 세션 초기화 (`/reset`)
-사용자가 `/reset`을 입력하면:
-1. 현재 대화 내용을 위 형식으로 chatlog.md에 저장
-2. "세션이 초기화되었습니다. chatlog.md에 저장 완료." 라고 알림
-3. 이후 대화는 chatlog.md만 참조하는 새 세션처럼 동작하라
+## [Session Reset — `/reset`]
+When user types `/reset`:
+1. Save current conversation to chatlog.md using the format above
+2. Notify: "세션이 초기화되었습니다. chatlog.md에 저장 완료."
+3. Treat subsequent conversation as a new session referencing only chatlog.md
 
-## [5] 원칙
-- chatlog.md 없이 작업을 시작하지 마라
-- 압축 시 코드, 파일 경로, 에러 메시지 등 핵심 기술 정보는 반드시 포함하라
-- 요약은 간결하게, 그러나 재현 가능한 수준으로 작성하라
+## [Principles]
+- Never begin any task without first reading chatlog.md
+- Always include critical technical details in summaries: code snippets, file paths, error messages
+- Keep summaries concise but reproducible enough to resume work without loss of context
