@@ -9,8 +9,12 @@
 | 파일 | 설명 |
 |------|------|
 | `.claude/CLAUDE.md` | Claude 동작 지침 (컨텍스트 관리, 세션 초기화, 한국어 응답 등) |
+| `.claude/commands/compress.md` | `/compress` 커맨드 — 대화 압축 후 chatlog.md 저장 |
+| `.claude/commands/save.md` | `/save` 커맨드 — compress의 별칭 |
+| `.claude/commands/reset.md` | `/reset` 커맨드 — 대화 저장 후 세션 초기화 |
 | `install.ps1` | 새 컴퓨터에서 자동으로 설정을 적용하는 PowerShell 스크립트 |
 | `README.txt` | install.ps1 상세 사용 설명서 |
+| `.gitignore` | 개인 데이터 파일 GitHub 업로드 제외 설정 |
 
 ---
 
@@ -49,12 +53,16 @@ irm https://raw.githubusercontent.com/pugi94/dotfiles/main/install.ps1 | iex
 - 모든 작업 시작 전 `chatlog.md`를 자동으로 읽어 이전 맥락을 이어갑니다.
 
 ### 커맨드
+
 | 커맨드 | 동작 |
 |--------|------|
 | `/compress` 또는 `/save` | 현재 대화를 압축해 `chatlog.md`에 저장 |
 | `/reset` | 대화 저장 후 세션 초기화 |
 
+> 💡 이 커맨드들은 `.claude/commands/` 폴더의 실제 슬래시 커맨드로 등록되어 있어 Claude Code에서 정확하게 동작합니다.
+
 ### chatlog.md 저장 형식
+
 ```markdown
 ## [YYYY-MM-DD HH:MM] Session Summary
 - **Goal**: 이 세션에서 하려던 것
@@ -62,6 +70,7 @@ irm https://raw.githubusercontent.com/pugi94/dotfiles/main/install.ps1 | iex
 - **In Progress**: 미완료 작업
 - **Key Decisions**: 핵심 결정사항
 - **Next Steps**: 다음 작업
+- **Technical Notes**: 코드, 파일 경로, 에러 메시지 등
 ```
 
 ---
@@ -89,6 +98,18 @@ git pull
 
 ---
 
+## 🚫 .gitignore 설정
+
+아래 항목들은 개인 데이터가 포함되어 있어 GitHub에 업로드되지 않습니다.
+
+```
+.claude/projects/        ← 대화 내용
+.claude/shell-snapshots/ ← 쉘 히스토리
+.claude/plugins/         ← 플러그인 설정
+```
+
+---
+
 ## 🛠️ 문제 해결
 
 **스크립트 실행 오류**
@@ -101,3 +122,9 @@ Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
 
 **Git 없음 오류**
 > https://git-scm.com 에서 설치 후 재시도
+
+**push 거절 오류 (fetch first)**
+```powershell
+git pull --rebase
+git push
+```
